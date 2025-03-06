@@ -5,6 +5,8 @@ use Logman\Model\Entry;
 if (!isset($this)) {http_response_code(403); exit;}
 
 /**
+ * @var int $count
+ * @var int $deleted
  * @var string $timestamp
  * @var string $level
  * @var string $module
@@ -19,10 +21,13 @@ if (!isset($this)) {http_response_code(403); exit;}
 ?>
 
 <h1>Logman – <?=$this->text('menu_main')?></h1>
+<?if ($deleted >= 0):?>
+<p class="xh_info"><?=$this->plural("message_deleted", $deleted)?></p>
+<?endif?>
 <form class="logman_form" method="get">
   <input type="hidden" name="selected" value="logman">
   <input type="hidden" name="admin" value="plugin_main">
-  <input type="hidden" name="action" value="plugin_text">
+  <input type="hidden" name="logman_count" value="<?=$count?>">
   <div class="logman_table_wrapper">
     <table>
       <thead>
@@ -54,7 +59,10 @@ if (!isset($this)) {http_response_code(403); exit;}
       </tbody>
     </table>
   </div>
-  <p class="logman_buttons"><button><?=$this->text('label_filter')?></button></p>
+  <p class="logman_buttons">
+    <button name="action" value="plugin_text"><?=$this->text('label_filter')?></button>
+    <button name="action" value="delete"><?=$this->text('label_delete')?></button>
+  </p>
   <datalist id="logman_months">
 <?foreach ($months as $month):?>
     <option value="<?=$this->esc($month)?>"></option>

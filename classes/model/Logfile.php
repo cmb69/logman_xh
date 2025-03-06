@@ -31,7 +31,7 @@ class Logfile
     }
 
     /**
-     * @param array<string,string> $filters
+     * @param array{timestamp?:string,level?:string,module?:string,category?:string,description?:string} $filters
      * @return list<Entry>
      */
     public function find(array $filters): array
@@ -52,7 +52,45 @@ class Logfile
         return $res;
     }
 
-    /** @param array<string,string> $filters */
+    /** @param array{timestamp?:string,level?:string,module?:string,category?:string,description?:string} $filters */
+    public function delete(int $count, array $filters): int
+    {
+        $res = 0;
+        if (($stream = fopen($this->filename, "r+"))) {
+            flock($stream, LOCK_EX);
+            if (($temp = fopen("php://memory", "w+"))) {
+                while (($line = fgets($stream)) !== false) {
+                    $record = explode("\t", rtrim($line));
+                    $entry = new Entry(...$record);
+                    if ($count > 0 && $this->satisfies($entry, $filters)) {
+                        $count--;
+                        $res++;
+                    } else {
+                        if (fwrite($temp, $line) !== strlen($line)) {
+                            $res = 0;
+                            goto out;
+                        }
+                    }
+                }
+                if (
+                    !rewind($temp)
+                    || !rewind($stream)
+                    || !ftruncate($stream, 0)
+                    || !stream_copy_to_stream($temp, $stream)
+                ) {
+                    $res = 0;
+                }
+                out:
+                fclose($temp);
+                fflush($stream);
+            }
+            flock($stream, LOCK_UN);
+            fclose($stream);
+        }
+        return $res;
+    }
+
+    /** @param array{timestamp?:string,level?:string,module?:string,category?:string,description?:string} $filters */
     private function satisfies(Entry $entry, array $filters): bool
     {
         return (!isset($filters["timestamp"]) || strcmp($entry->timestamp, $filters["timestamp"]) < 0)

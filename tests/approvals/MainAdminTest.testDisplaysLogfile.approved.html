@@ -3,7 +3,7 @@
 <form class="logman_form" method="get">
   <input type="hidden" name="selected" value="logman">
   <input type="hidden" name="admin" value="plugin_main">
-  <input type="hidden" name="action" value="plugin_text">
+  <input type="hidden" name="logman_count" value="1">
   <div class="logman_table_wrapper">
     <table>
       <thead>
@@ -33,7 +33,10 @@
       </tbody>
     </table>
   </div>
-  <p class="logman_buttons"><button>Filter</button></p>
+  <p class="logman_buttons">
+    <button name="action" value="plugin_text">Filter</button>
+    <button name="action" value="delete">Delete</button>
+  </p>
   <datalist id="logman_months">
     <option value="2023-01"></option>
   </datalist>

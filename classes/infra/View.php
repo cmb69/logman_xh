@@ -45,9 +45,18 @@ class View
         return (string) ob_get_clean();
     }
 
-    protected function text(string $key): string
+
+    /** @param scalar $args */
+    protected function text(string $key, ...$args): string
     {
-        return $this->esc($this->lang[$key]);
+        return sprintf($this->esc($this->lang[$key]), ...$args);
+    }
+
+    /** @param scalar $args */
+    protected function plural(string $key, int $count, ...$args): string
+    {
+        $suffix = ($count <= 0) ? "_5" : XH_numberSuffix($count);
+        return sprintf($this->esc($this->lang["{$key}{$suffix}"]), $count, ...$args);
     }
 
     protected function esc(string $string): string

@@ -41,26 +41,24 @@ class MainAdmin
         $this->view = $view;
     }
 
-    public function __invoke(): string
+    /** @return string|never */
+    public function __invoke()
     {
-        $filters = [];
-        if (!empty($_GET["logman_timestamp"]) && is_string($_GET["logman_timestamp"])) {
-            $filters["timestamp"] = $_GET["logman_timestamp"];
+        switch ($_GET["action"] ?? "") {
+            default:
+                return $this->show();
+            case "delete":
+                return isset($_POST["logman_do"]) ? $this->doDelete() : $this->delete();
         }
-        if (!empty($_GET["logman_level"]) && is_string($_GET["logman_level"])) {
-            $filters["level"] = $_GET["logman_level"];
-        }
-        if (!empty($_GET["logman_module"]) && is_string($_GET["logman_module"])) {
-            $filters["module"] = $_GET["logman_module"];
-        }
-        if (!empty($_GET["logman_category"]) && is_string($_GET["logman_category"])) {
-            $filters["category"] = $_GET["logman_category"];
-        }
-        if (!empty($_GET["logman_description"]) && is_string($_GET["logman_description"])) {
-            $filters["description"] = $_GET["logman_description"];
-        }
+    }
+
+    private function show(): string
+    {
+        $filters = $this->activeFilters();
         $entries = $this->logfile->find($filters);
         return $this->view->render("admin", [
+            "count" => count($entries),
+            "deleted" => (int) ($_GET["logman_deleted"] ?? -1),
             "timestamp" => $filters["timestamp"] ?? "",
             "level" => $filters["level"] ?? "",
             "module" => $filters["module"] ?? "",
@@ -132,5 +130,53 @@ class MainAdmin
             }
         }
         return array_keys($res);
+    }
+
+    private function delete(): string
+    {
+        return $this->view->render("confirm_delete", [
+            "count" => $_GET["logman_count"] ?? 0,
+        ]);
+    }
+
+    /** @return never */
+    private function doDelete()
+    {
+        $filters = $this->activeFilters();
+        $count = (int) ($_GET["logman_count"] ?? 0);
+        $deleted = $this->logfile->delete($count, $filters);
+        $this->redirect($deleted);
+    }
+
+    /** @return array{timestamp?:string,level?:string,module?:string,category?:string,description?:string} */
+    private function activeFilters(): array
+    {
+        $filters = [];
+        if (!empty($_GET["logman_timestamp"]) && is_string($_GET["logman_timestamp"])) {
+            $filters["timestamp"] = $_GET["logman_timestamp"];
+        }
+        if (!empty($_GET["logman_level"]) && is_string($_GET["logman_level"])) {
+            $filters["level"] = $_GET["logman_level"];
+        }
+        if (!empty($_GET["logman_module"]) && is_string($_GET["logman_module"])) {
+            $filters["module"] = $_GET["logman_module"];
+        }
+        if (!empty($_GET["logman_category"]) && is_string($_GET["logman_category"])) {
+            $filters["category"] = $_GET["logman_category"];
+        }
+        if (!empty($_GET["logman_description"]) && is_string($_GET["logman_description"])) {
+            $filters["description"] = $_GET["logman_description"];
+        }
+        return $filters;
+    }
+
+    /** @return never */
+    protected function redirect(int $deleted)
+    {
+        $query = $_SERVER["QUERY_STRING"];
+        $query .= "&logman_deleted=$deleted";
+        $query = preg_replace('/action=[^&]*/', "action=", $query);
+        header("Location: " . \CMSIMPLE_URL . "?$query", true, 303);
+        exit;
     }
 }
