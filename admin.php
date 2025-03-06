@@ -29,6 +29,8 @@ if (!defined("CMSIMPLE_XH_VERSION")) {
 /**
  * @var string $admin
  * @var string $o
+ * @var string $sn
+ * @var string $su
  */
 
 XH_registerStandardPluginMenuItems(true);

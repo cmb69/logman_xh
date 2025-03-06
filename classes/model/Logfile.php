@@ -30,19 +30,35 @@ class Logfile
         $this->filename = $filename;
     }
 
-    /** @return list<Entry> */
-    public function findAll(): array
+    /**
+     * @param array<string,string> $filters
+     * @return list<Entry>
+     */
+    public function find(array $filters): array
     {
         $res = [];
         if (($stream = fopen($this->filename, "r"))) {
             flock($stream, LOCK_SH);
             while (($line = fgets($stream)) !== false) {
                 $record = explode("\t", rtrim($line));
-                $res[] = new Entry(...$record);
+                $entry = new Entry(...$record);
+                if ($this->satisfies($entry, $filters)) {
+                    $res[] = $entry;
+                }
             }
             flock($stream, LOCK_UN);
             fclose($stream);
         }
         return $res;
+    }
+
+    /** @param array<string,string> $filters */
+    private function satisfies(Entry $entry, array $filters): bool
+    {
+        return (!isset($filters["timestamp"]) || strcmp($entry->timestamp, $filters["timestamp"]) < 0)
+            && (!isset($filters["level"]) || $entry->level === $filters["level"])
+            && (!isset($filters["module"]) || $entry->module === $filters["module"])
+            && (!isset($filters["category"]) || $entry->category === $filters["category"])
+            && (!isset($filters["description"]) || strpos($entry->description, $filters["description"]) !== false);
     }
 }
