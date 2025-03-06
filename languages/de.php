@@ -20,3 +20,5 @@ $plugin_tx['logman']['message_confirm_delete_5']="Möchten Sie wirklich diese %d
 $plugin_tx['logman']['message_deleted_1']="1 Eintrag gelöscht!";
 $plugin_tx['logman']['message_deleted_2_4']="%d Einträge gelöscht!";
 $plugin_tx['logman']['message_deleted_5']="%d Einträge gelöscht!";
+
+$plugin_tx['logman']['cf_entries_max']="Die Höchstanzahl von angezeigten Einträgen (0 zeigt alle Einträge).";

@@ -28,10 +28,10 @@ class Dic
 {
     public static function makeMainAdmin(): MainAdmin
     {
-        global $pth, $plugin_tx;
+        global $pth, $plugin_cf, $plugin_tx;
 
         $logfile = new Logfile($pth["file"]["log"]);
         $view = new View($pth["folder"]["plugins"] . "logman/views/", $plugin_tx["logman"]);
-        return new MainAdmin($logfile, $view);
+        return new MainAdmin($plugin_cf["logman"], $logfile, $view);
     }
 }

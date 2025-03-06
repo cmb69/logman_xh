@@ -18,13 +18,14 @@ class MainAdminTest extends TestCase
 
     public function setUp(): void
     {
+        $conf = XH_includeVar("./config/config.php", "plugin_cf")["logman"];
         $this->logfile = $this->createMock(Logfile::class);
         $this->logfile->expects($this->any())->method("find")->willReturn([
             new Entry("2023-01-30 14:00:05", "info", "XH", "login", "login from ::1"),
         ]);
         $view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["logman"]);
         $this->sut = $this->getMockBuilder(MainAdmin::class)
-            ->setConstructorArgs([$this->logfile, $view])
+            ->setConstructorArgs([$conf, $this->logfile, $view])
             ->onlyMethods(["redirect"])
             ->getMock();
     }

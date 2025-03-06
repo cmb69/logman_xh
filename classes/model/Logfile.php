@@ -34,17 +34,18 @@ class Logfile
      * @param array{timestamp?:string,level?:string,module?:string,category?:string,description?:string} $filters
      * @return list<Entry>
      */
-    public function find(array $filters): array
+    public function find(array $filters, int $max = PHP_INT_MAX): array
     {
         $res = [];
         if (($stream = fopen($this->filename, "r"))) {
             flock($stream, LOCK_SH);
-            while (($line = fgets($stream)) !== false) {
+            while ($max > 0 && ($line = fgets($stream)) !== false) {
                 $record = explode("\t", rtrim($line));
                 $entry = new Entry(...$record);
                 if ($this->satisfies($entry, $filters)) {
                     $res[] = $entry;
                 }
+                $max--;
             }
             flock($stream, LOCK_UN);
             fclose($stream);

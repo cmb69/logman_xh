@@ -20,3 +20,5 @@ $plugin_tx['logman']['message_confirm_delete_5']="Do you really want to delete t
 $plugin_tx['logman']['message_deleted_1']="1 entry deleted!";
 $plugin_tx['logman']['message_deleted_2_4']="%d entries deleted!";
 $plugin_tx['logman']['message_deleted_5']="%d entries deleted!";
+
+$plugin_tx['logman']['cf_entries_max']="The maximum number of entries to display (0 shows all entries).";

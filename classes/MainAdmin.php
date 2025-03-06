@@ -29,14 +29,19 @@ use function strlen;
 
 class MainAdmin
 {
+    /** @var array<string,string> */
+    private array $conf;
+
     /** @var Logfile */
     private $logfile;
 
     /** @var View */
     private $view;
 
-    public function __construct(Logfile $logfile, View $view)
+    /** @param array<string,string> $conf */
+    public function __construct(array $conf, Logfile $logfile, View $view)
     {
+        $this->conf = $conf;
         $this->logfile = $logfile;
         $this->view = $view;
     }
@@ -55,7 +60,11 @@ class MainAdmin
     private function show(): string
     {
         $filters = $this->activeFilters();
-        $entries = $this->logfile->find($filters);
+        $max = (int) $this->conf["entries_max"];
+        if ($max <= 0) {
+            $max = PHP_INT_MAX;
+        }
+        $entries = $this->logfile->find($filters, (int) $this->conf["entries_max"]);
         return $this->view->render("admin", [
             "count" => count($entries),
             "deleted" => (int) ($_GET["logman_deleted"] ?? -1),
