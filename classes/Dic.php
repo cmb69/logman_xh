@@ -19,26 +19,19 @@
  * along with Logman_XH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use Logman\Dic;
+namespace Logman;
 
-if (!defined("CMSIMPLE_XH_VERSION")) {
-    http_response_code(403);
-    exit;
-}
+use Logman\Infra\View;
+use Logman\Model\Logfile;
 
-/**
- * @var string $admin
- * @var string $o
- */
+class Dic
+{
+    public static function makeMainAdmin(): MainAdmin
+    {
+        global $pth, $plugin_tx;
 
-XH_registerStandardPluginMenuItems(true);
-if (XH_wantsPluginAdministration("logman")) {
-    $o .= print_plugin_admin("on");
-    switch ($admin) {
-        case "plugin_main":
-            $o .= Dic::makeMainAdmin()();
-            break;
-        default:
-            $o .= plugin_admin_common();
+        $logfile = new Logfile($pth["file"]["log"]);
+        $view = new View($pth["folder"]["plugins"] . "logman/views/", $plugin_tx["logman"]);
+        return new MainAdmin($logfile, $view);
     }
 }

@@ -19,26 +19,30 @@
  * along with Logman_XH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use Logman\Dic;
+namespace Logman\Model;
 
-if (!defined("CMSIMPLE_XH_VERSION")) {
-    http_response_code(403);
-    exit;
-}
+class Logfile
+{
+    private string $filename;
 
-/**
- * @var string $admin
- * @var string $o
- */
+    public function __construct(string $filename)
+    {
+        $this->filename = $filename;
+    }
 
-XH_registerStandardPluginMenuItems(true);
-if (XH_wantsPluginAdministration("logman")) {
-    $o .= print_plugin_admin("on");
-    switch ($admin) {
-        case "plugin_main":
-            $o .= Dic::makeMainAdmin()();
-            break;
-        default:
-            $o .= plugin_admin_common();
+    /** @return list<Entry> */
+    public function findAll(): array
+    {
+        $res = [];
+        if (($stream = fopen($this->filename, "r"))) {
+            flock($stream, LOCK_SH);
+            while (($line = fgets($stream)) !== false) {
+                $record = explode("\t", rtrim($line));
+                $res[] = new Entry(...$record);
+            }
+            flock($stream, LOCK_UN);
+            fclose($stream);
+        }
+        return $res;
     }
 }
