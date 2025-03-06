@@ -60,7 +60,7 @@ if (!isset($this)) {http_response_code(403); exit;}
     </table>
   </div>
   <p class="logman_buttons">
-    <button name="action" value="plugin_text"><?=$this->text('label_filter')?></button>
+    <button name="action" value="plugin_text"><?=$this->text('label_refresh')?></button>
     <button name="action" value="delete"><?=$this->text('label_delete')?></button>
   </p>
   <datalist id="logman_months">

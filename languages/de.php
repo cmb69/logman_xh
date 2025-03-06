@@ -10,6 +10,7 @@ $plugin_tx['logman']['label_filter']="Filter";
 $plugin_tx['logman']['label_is']="ist";
 $plugin_tx['logman']['label_level']="Stufe";
 $plugin_tx['logman']['label_module']="Modul";
+$plugin_tx['logman']['label_refresh']="Aktualisieren";
 $plugin_tx['logman']['label_timestamp']="Zeitstempel";
 $plugin_tx['logman']['label_until']="bis";
 
