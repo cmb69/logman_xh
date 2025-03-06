@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+
+<!DOCTYPE teplad [
+
+  <!ELEMENT teplad (xml_url,name,date_update,version,date_version,coder,tags,url,compatibility,php_ver,license,descriptions,screenshots,logo) >
+    <!ELEMENT url (download_url,coder_url,demo_url) >
+    <!ELEMENT descriptions (description+) >
+    <!ELEMENT screenshots (screenshot*) >
+
+    <!ELEMENT xml_url			(#PCDATA) >
+    <!ELEMENT name				(#PCDATA) >
+    <!ELEMENT date_update		(#PCDATA) >
+    <!ELEMENT version			(#PCDATA) >
+    <!ELEMENT date_version		(#PCDATA) >
+    <!ELEMENT coder				(#PCDATA) >
+    <!ELEMENT tags				(#PCDATA) >
+    <!ELEMENT compatibility		(#PCDATA) >
+    <!ELEMENT php_ver			(#PCDATA) >
+    <!ELEMENT license			(#PCDATA) >
+    <!ELEMENT logo				(#PCDATA) >
+
+    <!ELEMENT download_url		(#PCDATA) >
+    <!ELEMENT coder_url			(#PCDATA) >
+    <!ELEMENT demo_url			(#PCDATA) >
+    <!ELEMENT description		(#PCDATA|br|ol|ul|li|i|b)* >
+    <!ELEMENT br					EMPTY >
+    <!ELEMENT ol					(li+) >
+    <!ELEMENT ul					(li+) >
+    <!ELEMENT li				(#PCDATA) >
+    <!ELEMENT i					(#PCDATA) >
+    <!ELEMENT b					(#PCDATA) >
+    <!ELEMENT screenshot		(#PCDATA) >
+
+    <!ATTLIST teplad version CDATA	#REQUIRED >
+    <!ATTLIST name type	(plugin|template|addon) #REQUIRED >
+    <!ATTLIST description lang NMTOKEN	#REQUIRED >
+    <!ATTLIST screenshot view CDATA		#REQUIRED >
+]>
+
+<teplad version="1.1">
+  <xml_url>https://raw.githubusercontent.com/cmb69/calendar_xh/master/teplad.xml</xml_url>
+  <name type="plugin">Logman_XH</name>
+  <date_update>2025-03-06</date_update>
+  <version>1.0</version>
+  <date_version>2025-03-06</date_version>
+  <coder>Christoph M. Becker</coder>
+  <tags>backend,system</tags>
+  <url>
+    <download_url>https://github.com/cmb69/logman_xh/releases/tag/1.0</download_url>
+    <coder_url>https://3-magi.net/</coder_url>
+    <demo_url></demo_url>
+  </url>
+  <compatibility>≥ 1.7.0</compatibility>
+  <php_ver>≥ 7.4.0</php_ver>
+  <license>GPLv3</license>
+  <descriptions>
+    <description lang="en">
+    </description>
+    <description lang="de">
+    </description>
+  </descriptions>
+  <screenshots/>
+  <logo>https://raw.githubusercontent.com/cmb69/logman_xh/master/logman.png</logo>
+</teplad>
