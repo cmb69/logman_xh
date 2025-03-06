@@ -1,0 +1,22 @@
+.logman_table_wrapper {
+    overflow-x: auto;
+}
+.logman_form input[name=logman_timestamp] {
+    width: 11em;
+}
+.logman_form input[name=logman_level] {
+    width: 5em;
+}
+.logman_form input[name=logman_module] {
+    width: 7em;
+}
+.logman_form input[name=logman_category] {
+    width: 7em;
+}
+.logman_form input[name=logman_description] {
+    width: 21em;
+}
+.logman_buttons {
+    padding: 1em;
+    text-align: center;
+}
