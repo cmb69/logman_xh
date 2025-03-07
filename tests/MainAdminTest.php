@@ -11,35 +11,11 @@ use PHPUnit\Framework\TestCase;
 
 class MainAdminTest extends TestCase
 {
-    private $sut;
-
-    /** @var Logfile&MockObject */
-    private $logfile;
-
-    public function customSetUp(?int $maxEntries = null): void
-    {
-        $conf = XH_includeVar("./config/config.php", "plugin_cf")["logman"];
-        if ($maxEntries !== null) {
-            $conf["entries_max"] = (string) $maxEntries;
-        }
-        $this->logfile = $this->createMock(Logfile::class);
-        $this->logfile->expects($this->any())->method("find")->willReturnCallback(function (array $filters, int $max) {
-            if ($max === 0) {
-                return [];
-            } else {
-                return [new Entry("2023-01-30 14:00:05", "info", "XH", "login", "login from ::1")];
-            }
-        });
-        $view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["logman"]);
-        $this->sut = $this->getMockBuilder(MainAdmin::class)
-            ->setConstructorArgs([$conf, $this->logfile, $view])
-            ->onlyMethods(["redirect"])
-            ->getMock();
-    }
-
     public function testDisplaysLogfile(): void
     {
-        $this->customSetUp();
+        $logfile = $this->createMock(Logfile::class);
+        $logfile->expects($this->once())->method("find")->willReturn([$this->loginSuccessEntry()]);
+        $sut = $this->sut($this->conf(), $logfile, $this->view());
         $_GET = [
             "action" => "plugin_text",
             "logman_timestamp" => "2025",
@@ -48,22 +24,28 @@ class MainAdminTest extends TestCase
             "logman_category" => "login",
             "logman_description" => "from"
         ];
-        Approvals::verifyHtml(($this->sut)());
+        Approvals::verifyHtml($sut());
     }
 
     /** <https://github.com/cmb69/logman_xh/issues/1> */
     public function testZeroMaxEntriesDisplaysEntries(): void
     {
-        $this->customSetUp(0);
+        $conf = $this->conf();
+        $conf["entries_max"] = "0";
+        $logfile = $this->createMock(Logfile::class);
+        $logfile->expects($this->once())->method("find")->with($this->anything(), PHP_INT_MAX)
+            ->willReturn([$this->loginSuccessEntry()]);
+        $sut = $this->sut($conf, $logfile, $this->view());
         $_GET = [
             "action" => "plugin_text",
         ];
-        $this->assertStringContainsString("2023-01-30 14:00:05", ($this->sut)());
+        $this->assertStringContainsString("2023-01-30 14:00:05", $sut());
     }
 
     public function testDisplaysDeleteConfirmation(): void
     {
-        $this->customSetUp();
+        $logfile = $this->createMock(Logfile::class);
+        $sut = $this->sut($this->conf(), $logfile, $this->view());
         $_GET = [
             "action" => "delete",
             "logman_count" => "1",
@@ -73,13 +55,15 @@ class MainAdminTest extends TestCase
             "logman_category" => "login",
             "logman_description" => "from"
         ];
-        Approvals::verifyHtml(($this->sut)());
+        Approvals::verifyHtml($sut());
     }
 
     public function testDeletesEntries(): void
     {
-        $this->customSetUp();
-        $this->logfile->expects($this->once())->method("delete")->willReturn(1);
+        $logfile = $this->createMock(Logfile::class);
+        $logfile->expects($this->once())->method("delete")->willReturn(1);
+        $sut = $this->sut($this->conf(), $logfile, $this->view());
+        $sut->expects($this->once())->method("redirect");
         $_SERVER["QUERY_STRING"] = "";
         $_GET = [
             "action" => "delete",
@@ -93,13 +77,14 @@ class MainAdminTest extends TestCase
         $_POST = [
             "logman_do" => "",
         ];
-        $this->sut->expects($this->once())->method("redirect");
-        ($this->sut)();
+        $sut();
     }
 
     public function testDisplaysNumberOfDeletedEntries(): void
     {
-        $this->customSetUp();
+        $logfile = $this->createMock(Logfile::class);
+        $logfile->expects($this->once())->method("find")->willReturn([$this->loginSuccessEntry()]);
+        $sut = $this->sut($this->conf(), $logfile, $this->view());
         $_SERVER["QUERY_STRING"] = "";
         $_GET = [
             "action" => "",
@@ -111,6 +96,29 @@ class MainAdminTest extends TestCase
             "logman_category" => "login",
             "logman_description" => "from"
         ];
-        $this->assertStringContainsString("17 entries deleted!", ($this->sut)());
+        $this->assertStringContainsString("17 entries deleted!", $sut());
+    }
+
+    private function sut(array $conf, Logfile $logfile, View $view)
+    {
+        return $this->getMockBuilder(MainAdmin::class)
+            ->setConstructorArgs([$conf, $logfile, $view])
+            ->onlyMethods(["redirect"])
+            ->getMock();
+    }
+
+    private function conf(): array
+    {
+        return XH_includeVar("./config/config.php", "plugin_cf")["logman"];
+    }
+
+    private function view(): View
+    {
+        return new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["logman"]);
+    }
+
+    private function loginSuccessEntry(): Entry
+    {
+        return new Entry("2023-01-30 14:00:05", "info", "XH", "login", "login from ::1");
     }
 }
