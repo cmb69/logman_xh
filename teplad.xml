@@ -55,8 +55,21 @@
   <license>GPLv3</license>
   <descriptions>
     <description lang="en">
+      Logman_XH facilitates the management of the CMSimple_XH log file,
+      which is used by the core and extensions to log relevant events.
+      While CMSimple_XH already facilitates *viewing* the contents of the log file
+      in the back-end, Logman_XH offers an enhanced user interface,
+      which allows to filter the log, and even to delete old or otherwise unnecessary entries.
     </description>
     <description lang="de">
+      Logman_XH ermöglicht die Verwaltung der Logdatei von CMSimple_XH,
+      die vom Kernsystem und Erweiterungen verwendet wird,
+      um relevante Ereignisse zu protokollieren.
+      Während CMSimple_XH bereits die Möglichkeit bietet,
+      den Inhalt der Logdatei im Administrationsbereich *anzuzeigen*,
+      bietet Logman_XH eine erweiterte Benutzeroberfläche,
+      die die Filterung des Protokolls, und sogar das Löschen
+      alter oder anderweitig unnötiger Einträge ermöglicht.
     </description>
   </descriptions>
   <screenshots/>

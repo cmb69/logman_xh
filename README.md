@@ -1,5 +1,10 @@
 # Logman_XH
 
+Logman_XH facilitates the management of the CMSimple_XH log file,
+which is used by the core and extensions to log relevant events.
+While CMSimple_XH already facilitates *viewing* the contents of the log file
+in the back-end, Logman_XH offers an enhanced user interface,
+which allows to filter the log, and even to delete old or otherwise unnecessary entries.
 
 ## Table of Contents
 
@@ -14,7 +19,7 @@
 
 ## Requirements
 
-Logman_XH is a plugin for CMSimple_XH.
+Logman_XH is a plugin for [CMSimple_XH](https://www.cmsimple-xh.org/).
 It requires CMSimple_XH ≥ 1.7.0, and PHP ≥ 7.4.0.
 
 ## Download
@@ -52,6 +57,14 @@ The look of Logman_XH can be customized under *Stylesheet*.
 
 ## Usage
 
+In the back-end of your Website, go to *Plugins*→*Logman*→*Log file*
+to see the oldest log entries according to the configuration setting
+`entries_max`.
+You can apply filters by using the search fields above the table,
+to only display the log entries you are interested in.
+For instance, you can filter by a certain module, or a category.
+You can also remove all displayed log entries from the log file,
+what is particularly useful after you have filtered by timestamp.
 
 ## Troubleshooting
 

@@ -1,5 +1,13 @@
 # Logman_XH
 
+Logman_XH ermöglicht die Verwaltung der Logdatei von CMSimple_XH,
+die vom Kernsystem und Erweiterungen verwendet wird,
+um relevante Ereignisse zu protokollieren.
+Während CMSimple_XH bereits die Möglichkeit bietet,
+den Inhalt der Logdatei im Administrationsbereich *anzuzeigen*,
+bietet Logman_XH eine erweiterte Benutzeroberfläche,
+die die Filterung des Protokolls, und sogar das Löschen
+alter oder anderweitig unnötiger Einträge ermöglicht.
 
 ## Inhaltsverzeichnis
 
@@ -14,7 +22,7 @@
 
 ## Voraussetzungen
 
-Logman_XH ist ein Plugin für CMSimple_XH.
+Logman_XH ist ein Plugin für [CMSimple_XH](https://www.cmsimple-xh.org/de/).
 Es benötigt CMSimple_XH ≥ 1.7.0, und PHP ≥ 7.4.0.
 
 ## Download
@@ -56,6 +64,17 @@ Das Aussehen von Logman_XH kann unter *Stylesheet* angepasst werden.
 
 ## Verwendung
 
+Gehen Sie im Administrationsbereich Ihrer Website zu
+*Plugins*→*Logman*→*Log-Datei* um die ältesten Protokolleinträge
+gemäß der Konfigurationseinstellung `entries_max` anzuzeigen.
+Sie können durch Verwendung der Suchfelder oberhalb der Tabelle
+Filter anwenden, so dass nur diejenigen Protokolleinträge angezeigt
+werden, die Sie interessieren.
+Sie können beispielsweise nach einem bestimmten Modul oder einer
+Kategorie filtern.
+Sie können ebenfalls alle angezeigten Protokolleinträge aus der
+Logdatei entfernen, was besonders nützlich ist, wenn Sie nach
+Zeitstempel gefiltert haben.
 
 ## Fehlerbehebung
 
