@@ -37,7 +37,7 @@ The installation is done as with many other CMSimple_XH plugins.
     directory of CMSimple_XH.
 4.  Set write permissions for the subdirectories `config/`, `css/` and
     `languages/`.
-5.  Navigate to *Plugins* → *Calendar* in the back-end to check if all
+5.  Navigate to *Plugins*→*Logman* in the back-end to check if all
     requirements are fulfilled.
 
 ## Settings
