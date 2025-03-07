@@ -29,6 +29,7 @@ if (!defined("CMSIMPLE_XH_VERSION")) {
 /**
  * @var string $admin
  * @var string $o
+ * @var string $sl
  * @var string $sn
  * @var string $su
  */
@@ -37,6 +38,9 @@ XH_registerStandardPluginMenuItems(true);
 if (XH_wantsPluginAdministration("logman")) {
     $o .= print_plugin_admin("on");
     switch ($admin) {
+        case "":
+            $o .= Dic::makePluginInfo()($sl);
+            break;
         case "plugin_main":
             $o .= Dic::makeMainAdmin()();
             break;

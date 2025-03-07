@@ -21,4 +21,11 @@ $plugin_tx['logman']['message_deleted_1']="1 Eintrag gelöscht!";
 $plugin_tx['logman']['message_deleted_2_4']="%d Einträge gelöscht!";
 $plugin_tx['logman']['message_deleted_5']="%d Einträge gelöscht!";
 
+$plugin_tx['logman']['syscheck_bad']=" – schlecht";
+$plugin_tx['logman']['syscheck_good']=" – gut";
+$plugin_tx['logman']['syscheck_php_version']="PHP Version ist wenigstens %s";
+$plugin_tx['logman']['syscheck_title']="System-Prüfung";
+$plugin_tx['logman']['syscheck_writable']="%s ist schreibbar";
+$plugin_tx['logman']['syscheck_xh_version']="CMSimple_XH Version ist wenigstens %s";
+
 $plugin_tx['logman']['cf_entries_max']="Die Höchstanzahl von angezeigten Einträgen (0 zeigt alle Einträge).";

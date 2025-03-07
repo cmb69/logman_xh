@@ -21,4 +21,11 @@ $plugin_tx['logman']['message_deleted_1']="1 entry deleted!";
 $plugin_tx['logman']['message_deleted_2_4']="%d entries deleted!";
 $plugin_tx['logman']['message_deleted_5']="%d entries deleted!";
 
+$plugin_tx['logman']['syscheck_bad']=" – bad";
+$plugin_tx['logman']['syscheck_good']=" – good";
+$plugin_tx['logman']['syscheck_php_version']="PHP version is at least %s";
+$plugin_tx['logman']['syscheck_title']="System Check";
+$plugin_tx['logman']['syscheck_writable']="%s is writable";
+$plugin_tx['logman']['syscheck_xh_version']="CMSimple_XH version is at least %s";
+
 $plugin_tx['logman']['cf_entries_max']="The maximum number of entries to display (0 shows all entries).";

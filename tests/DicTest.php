@@ -15,6 +15,11 @@ class DicTest extends TestCase
         $plugin_tx = ["logman" => []];
     }
 
+    public function testMakesPluginInfo(): void
+    {
+        $this->assertInstanceOf(PluginInfo::class, Dic::makePluginInfo());
+    }
+
     public function testMakesMainAdmin(): void
     {
         $this->assertInstanceOf(MainAdmin::class, Dic::makeMainAdmin());

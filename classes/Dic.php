@@ -26,6 +26,13 @@ use Logman\Model\Logfile;
 
 class Dic
 {
+    public static function makePluginInfo(): PluginInfo
+    {
+        global $pth;
+
+        return new PluginInfo("{$pth["folder"]["plugins"]}logman/", self::view());
+    }
+
     public static function makeMainAdmin(): MainAdmin
     {
         global $pth, $plugin_cf, $plugin_tx;
@@ -33,5 +40,12 @@ class Dic
         $logfile = new Logfile($pth["file"]["log"]);
         $view = new View($pth["folder"]["plugins"] . "logman/views/", $plugin_tx["logman"]);
         return new MainAdmin($plugin_cf["logman"], $logfile, $view);
+    }
+
+    private static function view(): View
+    {
+        global $pth, $plugin_tx;
+
+        return new View($pth["folder"]["plugins"] . "logman/views/", $plugin_tx["logman"]);
     }
 }

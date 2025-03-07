@@ -49,14 +49,14 @@ class View
     /** @param scalar $args */
     protected function text(string $key, ...$args): string
     {
-        return sprintf($this->esc($this->lang[$key]), ...$args);
+        return $this->esc(sprintf($this->lang[$key], ...$args));
     }
 
     /** @param scalar $args */
     protected function plural(string $key, int $count, ...$args): string
     {
         $suffix = ($count <= 0) ? "_5" : XH_numberSuffix($count);
-        return sprintf($this->esc($this->lang["{$key}{$suffix}"]), $count, ...$args);
+        return $this->esc(sprintf($this->lang["{$key}{$suffix}"], $count, ...$args));
     }
 
     protected function esc(string $string): string
