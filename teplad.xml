@@ -40,9 +40,9 @@
 <teplad version="1.1">
   <xml_url>https://raw.githubusercontent.com/cmb69/logman_xh/master/teplad.xml</xml_url>
   <name type="plugin">Logman_XH</name>
-  <date_update>2025-03-06</date_update>
+  <date_update>2025-03-07</date_update>
   <version>1.0</version>
-  <date_version>2025-03-06</date_version>
+  <date_version>2025-03-07</date_version>
   <coder>Christoph M. Becker</coder>
   <tags>backend,system</tags>
   <url>
