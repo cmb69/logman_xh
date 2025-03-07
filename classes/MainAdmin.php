@@ -64,7 +64,7 @@ class MainAdmin
         if ($max <= 0) {
             $max = PHP_INT_MAX;
         }
-        $entries = $this->logfile->find($filters, (int) $this->conf["entries_max"]);
+        $entries = $this->logfile->find($filters, $max);
         return $this->view->render("admin", [
             "count" => count($entries),
             "deleted" => (int) ($_GET["logman_deleted"] ?? -1),
