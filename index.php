@@ -19,4 +19,4 @@
  * along with Logman_XH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const LOGMAN_VERSION = "1.0";
+const LOGMAN_VERSION = "1.1-dev";
