@@ -14,7 +14,11 @@ class MainAdminTest extends TestCase
     public function testDisplaysLogfile(): void
     {
         $logfile = $this->createMock(Logfile::class);
-        $logfile->expects($this->once())->method("find")->willReturn([$this->loginSuccessEntry()]);
+        $logfile->expects($this->once())->method("find")->willReturn([
+            $this->loginSuccessEntry(),
+            $this->movedEntry(),
+            $this->loginFailureEntry(),
+        ]);
         $sut = $this->sut($this->conf(), $logfile, $this->view());
         $_GET = [
             "action" => "plugin_text",
@@ -120,5 +124,15 @@ class MainAdminTest extends TestCase
     private function loginSuccessEntry(): Entry
     {
         return new Entry("2023-01-30 14:00:05", "info", "XH", "login", "login from ::1");
+    }
+
+    private function movedEntry(): Entry
+    {
+        return new Entry("2023-02-06 14:41:15", "warning", "moved", "not found", "Template3 from unknown");
+    }
+
+    private function loginFailureEntry(): Entry
+    {
+        return new Entry("2025-03-07 13:21:17", "warning", "XH", "login", "login failed from ::1");
     }
 }
