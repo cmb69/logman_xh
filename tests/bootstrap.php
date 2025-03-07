@@ -11,4 +11,4 @@ require_once "./classes/PluginInfo.php";
 
 const CMSIMPLE_XH_VERSION = "CMSimple_XH 1.7.6";
 const CMSIMPLE_URL = "http://example.com/";
-const LOGMAN_VERSION = "1.0-dev";
+const LOGMAN_VERSION = "1.0";
