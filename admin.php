@@ -20,6 +20,7 @@
  */
 
 use Logman\Dic;
+use Plib\Request;
 
 if (!defined("CMSIMPLE_XH_VERSION")) {
     http_response_code(403);
@@ -29,9 +30,6 @@ if (!defined("CMSIMPLE_XH_VERSION")) {
 /**
  * @var string $admin
  * @var string $o
- * @var string $sl
- * @var string $sn
- * @var string $su
  */
 
 XH_registerStandardPluginMenuItems(true);
@@ -39,10 +37,10 @@ if (XH_wantsPluginAdministration("logman")) {
     $o .= print_plugin_admin("on");
     switch ($admin) {
         case "":
-            $o .= Dic::makePluginInfo()($sl);
+            $o .= Dic::makePluginInfo()(Request::current());
             break;
         case "plugin_main":
-            $o .= Dic::makeMainAdmin()();
+            $o .= Dic::makeMainAdmin()(Request::current());
             break;
         default:
             $o .= plugin_admin_common();

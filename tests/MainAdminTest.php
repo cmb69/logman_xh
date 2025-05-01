@@ -6,6 +6,7 @@ use ApprovalTests\Approvals;
 use Logman\Model\Entry;
 use Logman\Model\Logfile;
 use PHPUnit\Framework\TestCase;
+use Plib\FakeRequest;
 use Plib\View;
 
 class MainAdminTest extends TestCase
@@ -19,15 +20,11 @@ class MainAdminTest extends TestCase
             $this->loginFailureEntry(),
         ]);
         $sut = $this->sut($this->conf(), $logfile, $this->view());
-        $_GET = [
-            "action" => "plugin_text",
-            "logman_timestamp" => "2025",
-            "logman_level" => "info",
-            "logman_module" => "XH",
-            "logman_category" => "login",
-            "logman_description" => "from"
-        ];
-        Approvals::verifyHtml($sut());
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&action=plugin_text&logman_timestamp=2025&logman_level=info&logman_module=XH"
+                . "&logman_category=login&logman_description=from",
+        ]);
+        Approvals::verifyHtml($sut($request));
     }
 
     /** <https://github.com/cmb69/logman_xh/issues/1> */
@@ -39,26 +36,20 @@ class MainAdminTest extends TestCase
         $logfile->expects($this->once())->method("find")->with($this->anything(), PHP_INT_MAX)
             ->willReturn([$this->loginSuccessEntry()]);
         $sut = $this->sut($conf, $logfile, $this->view());
-        $_GET = [
-            "action" => "plugin_text",
-        ];
-        $this->assertStringContainsString("2023-01-30 14:00:05", $sut());
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&action=plugin_text",
+        ]);
+        $this->assertStringContainsString("2023-01-30 14:00:05", $sut($request));
     }
 
     public function testDisplaysDeleteConfirmation(): void
     {
         $logfile = $this->createMock(Logfile::class);
         $sut = $this->sut($this->conf(), $logfile, $this->view());
-        $_GET = [
-            "action" => "delete",
-            "logman_count" => "1",
-            "logman_timestamp" => "2025",
-            "logman_level" => "info",
-            "logman_module" => "XH",
-            "logman_category" => "login",
-            "logman_description" => "from"
-        ];
-        Approvals::verifyHtml($sut());
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&action=delete&logman_count=1",
+        ]);
+        Approvals::verifyHtml($sut($request));
     }
 
     public function testDeletesEntries(): void
@@ -67,20 +58,13 @@ class MainAdminTest extends TestCase
         $logfile->expects($this->once())->method("delete")->willReturn(1);
         $sut = $this->sut($this->conf(), $logfile, $this->view());
         $sut->expects($this->once())->method("redirect");
-        $_SERVER["QUERY_STRING"] = "";
-        $_GET = [
-            "action" => "delete",
-            "logman_count" => "1",
-            "logman_timestamp" => "2025",
-            "logman_level" => "info",
-            "logman_module" => "XH",
-            "logman_category" => "login",
-            "logman_description" => "from"
-        ];
-        $_POST = [
-            "logman_do" => "",
-        ];
-        $sut();
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&action=delete&logman_count=1",
+            "post" => [
+                "logman_do" => "",
+            ],
+        ]);
+        $sut($request);
     }
 
     public function testDisplaysNumberOfDeletedEntries(): void
@@ -88,18 +72,10 @@ class MainAdminTest extends TestCase
         $logfile = $this->createMock(Logfile::class);
         $logfile->expects($this->once())->method("find")->willReturn([$this->loginSuccessEntry()]);
         $sut = $this->sut($this->conf(), $logfile, $this->view());
-        $_SERVER["QUERY_STRING"] = "";
-        $_GET = [
-            "action" => "",
-            "logman_count" => "1",
-            "logman_deleted" => "17",
-            "logman_timestamp" => "2025",
-            "logman_level" => "info",
-            "logman_module" => "XH",
-            "logman_category" => "login",
-            "logman_description" => "from"
-        ];
-        $this->assertStringContainsString("17 entries deleted!", $sut());
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&action=&logman_deleted=17",
+        ]);
+        $this->assertStringContainsString("17 entries deleted!", $sut($request));
     }
 
     private function sut(array $conf, Logfile $logfile, View $view)
