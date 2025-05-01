@@ -22,6 +22,7 @@
 namespace Logman;
 
 use Logman\Model\Logfile;
+use Plib\SystemChecker;
 use Plib\View;
 
 class Dic
@@ -30,7 +31,11 @@ class Dic
     {
         global $pth;
 
-        return new PluginInfo("{$pth["folder"]["plugins"]}logman/", self::view());
+        return new PluginInfo(
+            $pth["folder"]["plugins"] . "logman/",
+            new SystemChecker(),
+            self::view()
+        );
     }
 
     public static function makeMainAdmin(): MainAdmin

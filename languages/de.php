@@ -21,8 +21,8 @@ $plugin_tx['logman']['message_deleted_1']="1 Eintrag gelöscht!";
 $plugin_tx['logman']['message_deleted_2_4']="%d Einträge gelöscht!";
 $plugin_tx['logman']['message_deleted_5']="%d Einträge gelöscht!";
 
-$plugin_tx['logman']['syscheck_bad']=" – schlecht";
-$plugin_tx['logman']['syscheck_good']=" – gut";
+$plugin_tx['logman']['syscheck_bad']=" – nicht okay";
+$plugin_tx['logman']['syscheck_good']=" – okay";
 $plugin_tx['logman']['syscheck_php_version']="PHP Version ist wenigstens %s";
 $plugin_tx['logman']['syscheck_title']="System-Prüfung";
 $plugin_tx['logman']['syscheck_writable']="%s ist schreibbar";

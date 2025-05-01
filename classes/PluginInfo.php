@@ -21,16 +21,19 @@
 
 namespace Logman;
 
+use Plib\SystemChecker;
 use Plib\View;
 
 class PluginInfo
 {
     private string $folder;
+    private SystemChecker $systemChecker;
     private View $view;
 
-    public function __construct(string $folder, View $view)
+    public function __construct(string $folder, SystemChecker $systemChecker, View $view)
     {
         $this->folder = $folder;
+        $this->systemChecker = $systemChecker;
         $this->view = $view;
     }
 
@@ -51,10 +54,10 @@ class PluginInfo
     /** @return object{class:string,key:string,arg:string,result:string} */
     private function checkXhVersion(string $version): object
     {
-        $ok = $this->isXhVersionAtLeast($version);
+        $ok = $this->systemChecker->checkVersion(CMSIMPLE_XH_VERSION, "CMSimple_XH $version");
         return (object) [
             "class" => $ok ? "xh_success" : "xh_fail",
-            "key" => $ok ? "syscheck_xh_version" : "syscheck_xh_version_no",
+            "key" => "syscheck_xh_version",
             "arg" => $version,
             "result" => $ok ? "syscheck_good" : "syscheck_bad",
         ];
@@ -63,10 +66,10 @@ class PluginInfo
     /** @return object{class:string,key:string,arg:string,result:string} */
     private function checkPhpVersion(string $version): object
     {
-        $ok = $this->isPhpVersionAtLeast($version);
+        $ok = $this->systemChecker->checkVersion(PHP_VERSION, $version);
         return (object) [
             "class" => $ok ? "xh_success" : "xh_fail",
-            "key" => $ok ? "syscheck_php_version" : "syscheck_php_version_no",
+            "key" => "syscheck_php_version",
             "arg" => $version,
             "result" => $ok ? "syscheck_good" : "syscheck_bad",
         ];
@@ -75,27 +78,12 @@ class PluginInfo
     /** @return object{class:string,key:string,arg:string,result:string} */
     private function checkWritability(string $filename): object
     {
-        $ok = $this->isWritable($filename);
+        $ok = $this->systemChecker->checkWritability($filename);
         return (object) [
             "class" => $ok ? "xh_success" : "xh_fail",
-            "key" => $ok ? "syscheck_writable" : "syscheck_writable_no",
+            "key" => "syscheck_writable",
             "arg" => $filename,
             "result" => $ok ? "syscheck_good" : "syscheck_bad",
         ];
-    }
-
-    protected function isXhVersionAtLeast(string $version): bool
-    {
-        return version_compare(CMSIMPLE_XH_VERSION, "CMSimple_XH $version") >= 0;
-    }
-
-    protected function isPhpVersionAtLeast(string $version): bool
-    {
-        return version_compare(PHP_VERSION, $version) >= 0;
-    }
-
-    protected function isWritable(string $filename): bool
-    {
-        return is_writable($filename);
     }
 }
