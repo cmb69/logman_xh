@@ -37,10 +37,10 @@ if (XH_wantsPluginAdministration("logman")) {
     $o .= print_plugin_admin("on");
     switch ($admin) {
         case "":
-            $o .= Dic::makePluginInfo()(Request::current());
+            $o .= Dic::makePluginInfo()(Request::current())();
             break;
         case "plugin_main":
-            $o .= Dic::makeMainAdmin()(Request::current());
+            $o .= Dic::makeMainAdmin()(Request::current())();
             break;
         default:
             $o .= plugin_admin_common();

@@ -15,6 +15,6 @@ class PluginInfoTest extends TestCase
         $view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["logman"]);
         $sut = new PluginInfo("./", new FakeSystemChecker(), $view);
         $request = new FakeRequest(["language" => "en"]);
-        Approvals::verifyHtml($sut($request));
+        Approvals::verifyHtml($sut($request)->output());
     }
 }

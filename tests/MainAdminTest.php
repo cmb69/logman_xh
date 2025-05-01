@@ -24,7 +24,8 @@ class MainAdminTest extends TestCase
             "url" => "http://example.com/?&action=plugin_text&logman_timestamp=2025&logman_level=info&logman_module=XH"
                 . "&logman_category=login&logman_description=from",
         ]);
-        Approvals::verifyHtml($sut($request));
+        $response = $sut($request);
+        Approvals::verifyHtml($response->output());
     }
 
     /** <https://github.com/cmb69/logman_xh/issues/1> */
@@ -39,7 +40,8 @@ class MainAdminTest extends TestCase
         $request = new FakeRequest([
             "url" => "http://example.com/?&action=plugin_text",
         ]);
-        $this->assertStringContainsString("2023-01-30 14:00:05", $sut($request));
+        $response = $sut($request);
+        $this->assertStringContainsString("2023-01-30 14:00:05", $response->output());
     }
 
     public function testDisplaysDeleteConfirmation(): void
@@ -49,7 +51,8 @@ class MainAdminTest extends TestCase
         $request = new FakeRequest([
             "url" => "http://example.com/?&action=delete&logman_count=1",
         ]);
-        Approvals::verifyHtml($sut($request));
+        $response = $sut($request);
+        Approvals::verifyHtml($response->output());
     }
 
     public function testDeletesEntries(): void
@@ -57,14 +60,14 @@ class MainAdminTest extends TestCase
         $logfile = $this->createMock(Logfile::class);
         $logfile->expects($this->once())->method("delete")->willReturn(1);
         $sut = $this->sut($this->conf(), $logfile, $this->view());
-        $sut->expects($this->once())->method("redirect");
         $request = new FakeRequest([
             "url" => "http://example.com/?&action=delete&logman_count=1",
             "post" => [
                 "logman_do" => "",
             ],
         ]);
-        $sut($request);
+        $response = $sut($request);
+        $this->assertSame("http://example.com/?&logman_count=1&logman_deleted=1", $response->location());
     }
 
     public function testDisplaysNumberOfDeletedEntries(): void
@@ -75,15 +78,13 @@ class MainAdminTest extends TestCase
         $request = new FakeRequest([
             "url" => "http://example.com/?&action=&logman_deleted=17",
         ]);
-        $this->assertStringContainsString("17 entries deleted!", $sut($request));
+        $response = $sut($request);
+        $this->assertStringContainsString("17 entries deleted!", $response->output());
     }
 
     private function sut(array $conf, Logfile $logfile, View $view)
     {
-        return $this->getMockBuilder(MainAdmin::class)
-            ->setConstructorArgs([$conf, $logfile, $view])
-            ->onlyMethods(["redirect"])
-            ->getMock();
+        return new MainAdmin($conf, $logfile, $view);
     }
 
     private function conf(): array

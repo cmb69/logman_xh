@@ -24,6 +24,7 @@ namespace Logman;
 use Logman\Model\Entry;
 use Logman\Model\Logfile;
 use Plib\Request;
+use Plib\Response;
 use Plib\View;
 
 use function strlen;
@@ -47,8 +48,7 @@ class MainAdmin
         $this->view = $view;
     }
 
-    /** @return string|never */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): Response
     {
         switch ($request->get("action")) {
             default:
@@ -58,7 +58,7 @@ class MainAdmin
         }
     }
 
-    private function show(Request $request): string
+    private function show(Request $request): Response
     {
         $filters = $this->activeFilters($request);
         $max = (int) $this->conf["entries_max"];
@@ -66,7 +66,7 @@ class MainAdmin
             $max = PHP_INT_MAX;
         }
         $entries = $this->logfile->find($filters, $max);
-        return $this->view->render("admin", [
+        return Response::create($this->view->render("admin", [
             "count" => count($entries),
             "deleted" => (int) ($request->get("logman_deleted") ?? -1),
             "timestamp" => $filters["timestamp"] ?? "",
@@ -79,7 +79,7 @@ class MainAdmin
             "modules" => $this->modules($entries),
             "categories" => $this->categories($entries),
             "entries" => $entries,
-        ]);
+        ]));
     }
 
     /**
@@ -142,20 +142,20 @@ class MainAdmin
         return array_keys($res);
     }
 
-    private function delete(Request $request): string
+    private function delete(Request $request): Response
     {
-        return $this->view->render("confirm_delete", [
+        return Response::create($this->view->render("confirm_delete", [
             "count" => $request->get("logman_count") ?? 0,
-        ]);
+        ]));
     }
 
-    /** @return never */
-    private function doDelete(Request $request)
+    private function doDelete(Request $request): Response
     {
         $filters = $this->activeFilters($request);
         $count = (int) ($request->get("logman_count") ?? 0);
         $deleted = $this->logfile->delete($count, $filters);
-        $this->redirect($request, $deleted);
+        $url = $request->url()->without("action")->with("logman_deleted", (string) $deleted);
+        return Response::redirect($url->absolute());
     }
 
     /** @return array{timestamp?:string,level?:string,module?:string,category?:string,description?:string} */
@@ -178,13 +178,5 @@ class MainAdmin
             $filters["description"] = $request->get("logman_description");
         }
         return $filters;
-    }
-
-    /** @return never */
-    protected function redirect(Request $request, int $deleted)
-    {
-        $url = $request->url()->without("action")->with("logman_deleted", (string) $deleted);
-        header("Location: " . $url->absolute(), true, 303);
-        exit;
     }
 }

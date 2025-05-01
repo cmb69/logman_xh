@@ -22,6 +22,7 @@
 namespace Logman;
 
 use Plib\Request;
+use Plib\Response;
 use Plib\SystemChecker;
 use Plib\View;
 
@@ -38,9 +39,9 @@ class PluginInfo
         $this->view = $view;
     }
 
-    public function __invoke(Request $request): string
+    public function __invoke(Request $request): Response
     {
-        return $this->view->render("info", [
+        return Response::create($this->view->render("info", [
             "version" => LOGMAN_VERSION,
             "checks" => [
                 $this->checkXhVersion("1.7.0"),
@@ -49,7 +50,7 @@ class PluginInfo
                 $this->checkWritability("{$this->folder}css/stylesheet.css"),
                 $this->checkWritability("{$this->folder}languages/{$request->language()}.php"),
             ],
-        ]);
+        ]));
     }
 
     /** @return object{class:string,key:string,arg:string,result:string} */
