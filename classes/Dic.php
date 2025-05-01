@@ -21,7 +21,6 @@
 
 namespace Logman;
 
-use Logman\Model\Logfile;
 use Plib\DocumentStore;
 use Plib\SystemChecker;
 use Plib\View;

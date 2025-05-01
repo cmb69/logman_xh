@@ -23,7 +23,6 @@ namespace Logman;
 
 use Logman\Model\Entry;
 use Logman\Model\Log;
-use Logman\Model\Logfile;
 use Plib\DocumentStore;
 use Plib\Request;
 use Plib\Response;
@@ -157,7 +156,6 @@ class MainAdmin
         $count = (int) ($request->get("logman_count") ?? 0);
         $log = Log::updateIn($this->store);
         $deleted = $log->delete($filters, $count);
-        // $deleted = $this->logfile->delete($count, $filters);
         $this->store->commit();
         $url = $request->url()->without("action")->with("logman_deleted", (string) $deleted);
         return Response::redirect($url->absolute());
