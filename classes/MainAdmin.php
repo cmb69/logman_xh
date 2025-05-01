@@ -21,9 +21,9 @@
 
 namespace Logman;
 
-use Logman\Infra\View;
 use Logman\Model\Entry;
 use Logman\Model\Logfile;
+use Plib\View;
 
 use function strlen;
 

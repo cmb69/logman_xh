@@ -21,8 +21,8 @@
 
 namespace Logman;
 
-use Logman\Infra\View;
 use Logman\Model\Logfile;
+use Plib\View;
 
 class Dic
 {

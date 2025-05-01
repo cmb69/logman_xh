@@ -21,7 +21,7 @@
 
 namespace Logman;
 
-use Logman\Infra\View;
+use Plib\View;
 
 class PluginInfo
 {

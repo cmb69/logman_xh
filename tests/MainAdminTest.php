@@ -3,11 +3,10 @@
 namespace Logman;
 
 use ApprovalTests\Approvals;
-use Logman\Infra\View;
 use Logman\Model\Entry;
 use Logman\Model\Logfile;
-use PHPUnit\Framework\MockObject;
 use PHPUnit\Framework\TestCase;
+use Plib\View;
 
 class MainAdminTest extends TestCase
 {

@@ -3,8 +3,8 @@
 namespace Logman;
 
 use ApprovalTests\Approvals;
-use Logman\Infra\View;
 use PHPUnit\Framework\TestCase;
+use Plib\View;
 
 class PluginInfoTest extends TestCase
 {
