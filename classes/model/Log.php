@@ -27,7 +27,7 @@ use Plib\DocumentStore;
 final class Log implements Document
 {
     /** @var list<Entry> */
-    private array $entries = [];
+    private array $entries;
 
     public static function retrieveFrom(DocumentStore $store): self
     {
@@ -45,7 +45,7 @@ final class Log implements Document
 
     public static function fromString(string $contents, string $key): self
     {
-        $that = new self();
+        $that = new self([]);
         if (($lines = preg_split('/(?:\r)?\n/', $contents)) === false) {
             return $that;
         }
@@ -53,10 +53,16 @@ final class Log implements Document
             if ($line === "") {
                 continue;
             }
-            $record = explode("\t", rtrim($line));
+            $record = array_pad(explode("\t", $line, 5), 5, "");
             $that->entries[] = new Entry(...$record);
         }
         return $that;
+    }
+
+    /** @param list<Entry> $entries */
+    public function __construct(array $entries)
+    {
+        $this->entries = $entries;
     }
 
     public function append(Entry $entry): void
