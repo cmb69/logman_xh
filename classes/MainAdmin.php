@@ -22,7 +22,9 @@
 namespace Logman;
 
 use Logman\Model\Entry;
+use Logman\Model\Log;
 use Logman\Model\Logfile;
+use Plib\DocumentStore;
 use Plib\Request;
 use Plib\Response;
 use Plib\View;
@@ -34,17 +36,16 @@ class MainAdmin
     /** @var array<string,string> */
     private array $conf;
 
-    /** @var Logfile */
-    private $logfile;
+    private DocumentStore $store;
 
     /** @var View */
     private $view;
 
     /** @param array<string,string> $conf */
-    public function __construct(array $conf, Logfile $logfile, View $view)
+    public function __construct(array $conf, DocumentStore $store, View $view)
     {
         $this->conf = $conf;
-        $this->logfile = $logfile;
+        $this->store = $store;
         $this->view = $view;
     }
 
@@ -60,12 +61,13 @@ class MainAdmin
 
     private function show(Request $request): Response
     {
+        $log = Log::retrieveFrom($this->store);
         $filters = $this->activeFilters($request);
         $max = (int) $this->conf["entries_max"];
         if ($max <= 0) {
             $max = PHP_INT_MAX;
         }
-        $entries = $this->logfile->find($filters, $max);
+        $entries = $log->filter($filters, $max);
         return Response::create($this->view->render("admin", [
             "count" => count($entries),
             "deleted" => (int) ($request->get("logman_deleted") ?? -1),
@@ -153,7 +155,10 @@ class MainAdmin
     {
         $filters = $this->activeFilters($request);
         $count = (int) ($request->get("logman_count") ?? 0);
-        $deleted = $this->logfile->delete($count, $filters);
+        $log = Log::updateIn($this->store);
+        $deleted = $log->delete($filters, $count);
+        // $deleted = $this->logfile->delete($count, $filters);
+        $this->store->commit();
         $url = $request->url()->without("action")->with("logman_deleted", (string) $deleted);
         return Response::redirect($url->absolute());
     }

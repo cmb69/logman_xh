@@ -46,4 +46,10 @@ class Entry
         $this->category = $category;
         $this->description = $description;
     }
+
+    public function toString(): string
+    {
+        return $this->timestamp . "\t" . $this->level . "\t" . $this->module . "\t"
+            . $this->category . "\t" . $this->description;
+    }
 }

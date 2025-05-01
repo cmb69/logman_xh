@@ -4,6 +4,8 @@ require_once "./vendor/autoload.php";
 
 require_once "../../cmsimple/functions.php";
 
+require_once "../plib/classes/Document.php";
+require_once "../plib/classes/DocumentStore.php";
 require_once "../plib/classes/Request.php";
 require_once "../plib/classes/Response.php";
 require_once "../plib/classes/SystemChecker.php";
@@ -13,7 +15,7 @@ require_once "../plib/classes/FakeRequest.php";
 require_once "../plib/classes/FakeSystemChecker.php";
 
 require_once "./classes/model/Entry.php";
-require_once "./classes/model/Logfile.php";
+require_once "./classes/model/Log.php";
 require_once "./classes/Dic.php";
 require_once "./classes/MainAdmin.php";
 require_once "./classes/PluginInfo.php";

@@ -4,9 +4,12 @@ namespace Logman;
 
 use ApprovalTests\Approvals;
 use Logman\Model\Entry;
+use Logman\Model\Log;
 use Logman\Model\Logfile;
+use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Plib\DocumentStore;
 use Plib\FakeRequest;
 use Plib\View;
 
@@ -15,33 +18,36 @@ class MainAdminTest extends TestCase
     /** @var array<string,string> */
     private array $conf;
 
-    /** @var LogFile&MockObject */
-    private $logfile;
+    private DocumentStore $store;
 
     private View $view;
 
     public function setUp(): void
     {
+        vfsStream::setup("root");
         $this->conf = XH_includeVar("./config/config.php", "plugin_cf")["logman"];
-        $this->logfile = $this->createStub(Logfile::class);
+        $this->store = new DocumentStore(vfsStream::url("root/"));
         $this->view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["logman"]);
     }
 
     private function sut()
     {
-        return new MainAdmin($this->conf, $this->logfile, $this->view);
+        return new MainAdmin(
+            $this->conf,
+            $this->store,
+            $this->view
+        );
     }
 
     public function testDisplaysLogfile(): void
     {
-        $this->logfile->expects($this->once())->method("find")->willReturn([
-            $this->loginSuccessEntry(),
-            $this->movedEntry(),
-            $this->loginFailureEntry(),
-        ]);
+        $log = Log::updateIn($this->store);
+        $log->append($this->loginSuccessEntry());
+        $log->append($this->movedEntry());
+        $log->append($this->loginFailureEntry());
+        $this->store->commit();
         $request = new FakeRequest([
-            "url" => "http://example.com/?&action=plugin_text&logman_timestamp=2025&logman_level=info&logman_module=XH"
-                . "&logman_category=login&logman_description=from",
+            "url" => "http://example.com/?&action=plugin_text",
         ]);
         $response = $this->sut()($request);
         Approvals::verifyHtml($response->output());
@@ -50,9 +56,10 @@ class MainAdminTest extends TestCase
     /** <https://github.com/cmb69/logman_xh/issues/1> */
     public function testZeroMaxEntriesDisplaysEntries(): void
     {
+        $log = Log::updateIn($this->store);
+        $log->append($this->loginSuccessEntry());
+        $this->store->commit();
         $this->conf["entries_max"] = "0";
-        $this->logfile->expects($this->once())->method("find")->with($this->anything(), PHP_INT_MAX)
-            ->willReturn([$this->loginSuccessEntry()]);
         $request = new FakeRequest([
             "url" => "http://example.com/?&action=plugin_text",
         ]);
@@ -71,7 +78,9 @@ class MainAdminTest extends TestCase
 
     public function testDeletesEntries(): void
     {
-        $this->logfile->expects($this->once())->method("delete")->willReturn(1);
+        $log = Log::updateIn($this->store);
+        $log->append($this->loginSuccessEntry());
+        $this->store->commit();
         $request = new FakeRequest([
             "url" => "http://example.com/?&action=delete&logman_count=1",
             "post" => [
@@ -84,7 +93,9 @@ class MainAdminTest extends TestCase
 
     public function testDisplaysNumberOfDeletedEntries(): void
     {
-        $this->logfile->expects($this->once())->method("find")->willReturn([$this->loginSuccessEntry()]);
+        $log = Log::updateIn($this->store);
+        $log->append($this->loginSuccessEntry());
+        $this->store->commit();
         $request = new FakeRequest([
             "url" => "http://example.com/?&action=&logman_deleted=17",
         ]);

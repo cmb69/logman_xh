@@ -10,7 +10,7 @@ class DicTest extends TestCase
     {
         global $pth, $plugin_cf, $plugin_tx;
 
-        $pth = ["folder" => ["plugins" => ""], "file" => ["log" => ""]];
+        $pth = ["folder" => ["cmsimple" => "", "plugins" => ""], "file" => ["log" => ""]];
         $plugin_cf = ["logman" => []];
         $plugin_tx = ["logman" => []];
     }

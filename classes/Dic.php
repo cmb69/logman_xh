@@ -22,6 +22,7 @@
 namespace Logman;
 
 use Logman\Model\Logfile;
+use Plib\DocumentStore;
 use Plib\SystemChecker;
 use Plib\View;
 
@@ -42,9 +43,12 @@ class Dic
     {
         global $pth, $plugin_cf, $plugin_tx;
 
-        $logfile = new Logfile($pth["file"]["log"]);
         $view = new View($pth["folder"]["plugins"] . "logman/views/", $plugin_tx["logman"]);
-        return new MainAdmin($plugin_cf["logman"], $logfile, $view);
+        return new MainAdmin(
+            $plugin_cf["logman"],
+            new DocumentStore($pth["folder"]["cmsimple"]),
+            $view
+        );
     }
 
     private static function view(): View
