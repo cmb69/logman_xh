@@ -2,12 +2,8 @@
     overflow-x: auto;
 }
 .logman_table_wrapper td {
-    white-space: nowrap;
-}
-.logman_buttons {
-    padding: 1em;
-    display: flex;
-    justify-content: space-evenly;
+    /* white-space: nowrap; */
+    vertical-align: top;
 }
 .logman_form input[name=logman_timestamp] {
     width: 11em;
@@ -23,4 +19,9 @@
 }
 .logman_form input[name=logman_description] {
     width: 21em;
+}
+.logman_buttons {
+    padding: 1em;
+    display: flex;
+    justify-content: space-evenly;
 }
