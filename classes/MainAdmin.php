@@ -21,14 +21,11 @@
 
 namespace Logman;
 
-use Logman\Model\Entry;
 use Logman\Model\Log;
 use Plib\DocumentStore;
 use Plib\Request;
 use Plib\Response;
 use Plib\View;
-
-use function strlen;
 
 class MainAdmin
 {
@@ -37,8 +34,7 @@ class MainAdmin
 
     private DocumentStore $store;
 
-    /** @var View */
-    private $view;
+    private View $view;
 
     /** @param array<string,string> $conf */
     public function __construct(array $conf, DocumentStore $store, View $view)
@@ -75,72 +71,12 @@ class MainAdmin
             "module" => $filters["module"] ?? "",
             "category" => $filters["category"] ?? "",
             "description" => $filters["description"] ?? "",
-            "months" => $this->months($entries),
-            "levels" => $this->levels($entries),
-            "modules" => $this->modules($entries),
-            "categories" => $this->categories($entries),
+            "months" => $log->months(),
+            "levels" => $log->levels(),
+            "modules" => $log->modules(),
+            "categories" => $log->categories(),
             "entries" => $entries,
         ]));
-    }
-
-    /**
-     * @param list<Entry> $entries
-     * @return list<string>
-     */
-    private function months(array $entries): array
-    {
-        $res = [];
-        foreach ($entries as $entry) {
-            if (!isset($res[$entry->timestamp])) {
-                $res[substr($entry->timestamp, 0, strlen("YYYY-MM"))] = true;
-            }
-        }
-        return array_keys($res);
-    }
-
-    /**
-     * @param list<Entry> $entries
-     * @return list<string>
-     */
-    private function levels(array $entries): array
-    {
-        $res = [];
-        foreach ($entries as $entry) {
-            if (!isset($res[$entry->level])) {
-                $res[$entry->level] = true;
-            }
-        }
-        return array_keys($res);
-    }
-
-    /**
-     * @param list<Entry> $entries
-     * @return list<string>
-     */
-    private function modules(array $entries): array
-    {
-        $res = [];
-        foreach ($entries as $entry) {
-            if (!isset($res[$entry->module])) {
-                $res[$entry->module] = true;
-            }
-        }
-        return array_keys($res);
-    }
-
-    /**
-     * @param list<Entry> $entries
-     * @return list<string>
-     */
-    private function categories(array $entries): array
-    {
-        $res = [];
-        foreach ($entries as $entry) {
-            if (!isset($res[$entry->category])) {
-                $res[$entry->category] = true;
-            }
-        }
-        return array_keys($res);
     }
 
     private function delete(Request $request): Response

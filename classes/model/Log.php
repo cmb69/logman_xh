@@ -70,6 +70,54 @@ final class Log implements Document
         $this->entries[] = $entry;
     }
 
+    /** @return list<string> */
+    public function months(): array
+    {
+        $res = [];
+        foreach ($this->entries as $entry) {
+            if (!isset($res[$entry->timestamp])) {
+                $res[substr($entry->timestamp, 0, strlen("YYYY-MM"))] = true;
+            }
+        }
+        return array_keys($res);
+    }
+
+    /** @return list<string> */
+    public function levels(): array
+    {
+        $res = [];
+        foreach ($this->entries as $entry) {
+            if (!isset($res[$entry->level])) {
+                $res[$entry->level] = true;
+            }
+        }
+        return array_keys($res);
+    }
+
+    /** @return list<string> */
+    public function modules(): array
+    {
+        $res = [];
+        foreach ($this->entries as $entry) {
+            if (!isset($res[$entry->module])) {
+                $res[$entry->module] = true;
+            }
+        }
+        return array_keys($res);
+    }
+
+    /** @return list<string> */
+    public function categories(): array
+    {
+        $res = [];
+        foreach ($this->entries as $entry) {
+            if (!isset($res[$entry->category])) {
+                $res[$entry->category] = true;
+            }
+        }
+        return array_keys($res);
+    }
+
     /**
      * @param array{timestamp?:string,level?:string,module?:string,category?:string,description?:string} $filters
      * @return list<Entry>
