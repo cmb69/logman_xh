@@ -165,19 +165,19 @@ class MainAdmin
     private function activeFilters(Request $request): array
     {
         $filters = [];
-        if ($request->get("logman_timestamp") !== null) {
+        if (!empty($request->get("logman_timestamp"))) {
             $filters["timestamp"] = $request->get("logman_timestamp");
         }
-        if ($request->get("logman_level") !== null) {
+        if (!empty($request->get("logman_level"))) {
             $filters["level"] = $request->get("logman_level");
         }
-        if ($request->get("logman_module") !== null) {
+        if (!empty($request->get("logman_module"))) {
             $filters["module"] = $request->get("logman_module");
         }
-        if ($request->get("logman_category") !== null) {
+        if (!empty($request->get("logman_category"))) {
             $filters["category"] = $request->get("logman_category");
         }
-        if ($request->get("logman_description") !== null) {
+        if (!empty($request->get("logman_description"))) {
             $filters["description"] = $request->get("logman_description");
         }
         return $filters;
