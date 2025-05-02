@@ -37,16 +37,16 @@
     <!ATTLIST screenshot view CDATA		#REQUIRED >
 ]>
 
-<teplad version="1.1">
+<teplad version="1.2-dev">
   <xml_url>https://raw.githubusercontent.com/cmb69/logman_xh/master/teplad.xml</xml_url>
   <name type="plugin">Logman_XH</name>
   <date_update>2025-05-02</date_update>
-  <version>1.1</version>
+  <version>1.2-dev</version>
   <date_version>2025-05-02</date_version>
   <coder>Christoph M. Becker</coder>
   <tags>backend,system</tags>
   <url>
-    <download_url>https://github.com/cmb69/logman_xh/releases/tag/1.1</download_url>
+    <download_url>https://github.com/cmb69/logman_xh/releases/tag/1.2-dev</download_url>
     <coder_url>https://3-magi.net/</coder_url>
     <demo_url></demo_url>
   </url>
