@@ -95,11 +95,10 @@
       <fileset dir="dist/logman">
         <include name="config/config.php"/>
         <include name="languages/??.php"/>
-        <include name="css/stylesheet.css"/>
       </fileset>
     </delete>
-    <zip destfile="Logman_XH-1.1-update-from-1.x.zip" basedir="dist"
-       includeemptydirs="false"/>
+    <move file="dist/logman/css/stylesheet.css" tofile="dist/logman/css/stylesheet-1.1.css"/>
+    <zip destfile="Logman_XH-1.1-update-from-1.x.zip" basedir="dist" includeemptydirs="false"/>
     <delete dir="patchee" quiet="true"/>
     <delete dir="current" quiet="true"/>
     <delete dir="dist" quiet="true"/>
