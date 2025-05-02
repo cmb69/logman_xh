@@ -2,6 +2,7 @@
 
 $plugin_tx['logman']['menu_main']="Log file";
 
+$plugin_tx['logman']['label_ascending']="show oldest";
 $plugin_tx['logman']['label_category']="Category";
 $plugin_tx['logman']['label_contains']="contains";
 $plugin_tx['logman']['label_description']="Description";

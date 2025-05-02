@@ -17,6 +17,7 @@ if (!isset($this)) {http_response_code(403); exit;}
  * @var list<string> $modules
  * @var list<string> $categories
  * @var list<Entry> $entries
+ * @var bool $ascending
  */
 ?>
 
@@ -60,8 +61,14 @@ if (!isset($this)) {http_response_code(403); exit;}
     </table>
   </div>
   <p class="logman_buttons">
+    <label>
+      <input type="checkbox" name="logman_ascending" <?=$this->esc($ascending)?>>
+      <span><?=$this->text('label_ascending')?></span>
+    </label>
     <button name="action" value="plugin_text"><?=$this->text('label_refresh')?></button>
+<?if ($ascending):?>
     <button name="action" value="delete"><?=$this->text('label_delete')?></button>
+<?endif?>
   </p>
   <datalist id="logman_months">
 <?foreach ($months as $month):?>

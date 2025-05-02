@@ -62,7 +62,7 @@ class MainAdmin
         if ($max <= 0) {
             $max = PHP_INT_MAX;
         }
-        $entries = $log->filter($filters, $max);
+        $entries = $log->filter($filters, (bool) $request->get("logman_ascending"), $max);
         return Response::create($this->view->render("admin", [
             "count" => count($entries),
             "deleted" => (int) ($request->get("logman_deleted") ?? -1),
@@ -76,6 +76,7 @@ class MainAdmin
             "modules" => $log->modules(),
             "categories" => $log->categories(),
             "entries" => $entries,
+            "ascending" => $request->get("logman_ascending") ? "checked" : "",
         ]));
     }
 

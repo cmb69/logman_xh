@@ -76,7 +76,10 @@ Filter anwenden, so dass nur diejenigen Protokolleinträge angezeigt
 werden, die Sie interessieren.
 Sie können beispielsweise nach einem bestimmten Modul oder einer
 Kategorie filtern.
-Sie können ebenfalls alle angezeigten Protokolleinträge aus der
+Standardmäßig werden die neuesten Protokolleinträge angezeigt,
+aber das kann durch anhaken von `älteste Anzeigen` geändert werden.
+Werden die ältesten Protokolleinträge angezeigt,
+können Sie alle angezeigten Protokolleinträge aus der
 Logdatei entfernen, was besonders nützlich ist, wenn Sie nach
 Zeitstempel gefiltert haben.
 

@@ -67,7 +67,9 @@ to see the oldest log entries according to the configuration setting
 You can apply filters by using the search fields above the table,
 to only display the log entries you are interested in.
 For instance, you can filter by a certain module, or a category.
-You can also remove all displayed log entries from the log file,
+By default, the newest log entries are shown, but you can change this by
+checking `show oldest`. If the oldest log entries are shown,
+you can delete all displayed log entries from the log file,
 what is particularly useful after you have filtered by timestamp.
 
 ## Troubleshooting

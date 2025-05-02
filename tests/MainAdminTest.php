@@ -45,7 +45,7 @@ class MainAdminTest extends TestCase
         $log->append($this->loginFailureEntry());
         $this->store->commit();
         $request = new FakeRequest([
-            "url" => "http://example.com/?&action=plugin_text",
+            "url" => "http://example.com/?&action=plugin_text&logman_ascending=1",
         ]);
         $response = $this->sut()($request);
         Approvals::verifyHtml($response->output());

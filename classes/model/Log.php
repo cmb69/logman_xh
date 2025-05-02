@@ -122,14 +122,15 @@ final class Log implements Document
      * @param array{timestamp?:string,level?:string,module?:string,category?:string,description?:string} $filters
      * @return list<Entry>
      */
-    public function filter(array $filters, int $max = PHP_INT_MAX): array
+    public function filter(array $filters, bool $ascending = true, int $max = PHP_INT_MAX): array
     {
         $res = [];
-        foreach ($this->entries as $entry) {
+        $entries = $ascending ? $this->entries : array_reverse($this->entries);
+        foreach ($entries as $entry) {
             if ($max-- <= 0) {
                 break;
             }
-            if ($this->satisfies($entry, $filters)) {
+            if ($this->satisfies($entry, $filters, $ascending ? 1 : -1)) {
                 $res[] = $entry;
             }
         }
@@ -153,9 +154,9 @@ final class Log implements Document
     }
 
     /** @param array{timestamp?:string,level?:string,module?:string,category?:string,description?:string} $filters */
-    private function satisfies(Entry $entry, array $filters): bool
+    private function satisfies(Entry $entry, array $filters, int $order = 1): bool
     {
-        return (!isset($filters["timestamp"]) || strcmp($entry->timestamp, $filters["timestamp"]) < 0)
+        return (!isset($filters["timestamp"]) || strcmp($entry->timestamp, $filters["timestamp"]) * $order < 0)
             && (!isset($filters["level"]) || $entry->level === $filters["level"])
             && (!isset($filters["module"]) || $entry->module === $filters["module"])
             && (!isset($filters["category"]) || $entry->category === $filters["category"])
